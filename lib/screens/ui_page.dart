@@ -59,8 +59,8 @@ class _UiPageState extends State<UiPage> {
           Navigator.of(context)
           .push(MaterialPageRoute(builder: (context) => AddTaskPage()));
         },
-        child: Icon(Icons.add),
         backgroundColor: Colors.purpleAccent,
+        child: Icon(Icons.add),
       ),
     );
   }

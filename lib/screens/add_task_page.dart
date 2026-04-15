@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ui_class/data/dummy_data.dart';
 import 'package:flutter_ui_class/models/card_data_model.dart';
 import 'package:flutter_ui_class/providers/task_management_provider.dart';
 import 'package:flutter_ui_class/utils/validators.dart';
