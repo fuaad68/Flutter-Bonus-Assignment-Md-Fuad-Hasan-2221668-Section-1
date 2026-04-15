@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "259679551913",
+    "project_id": "flutter-bonus-assignment",
+    "storage_bucket": "flutter-bonus-assignment.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:259679551913:android:691e27397b9c6858db44b8",
+        "android_client_info": {
+          "package_name": "com.example.flutter_ui_class"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtsiz8v5mvist_k5UnJlyBxUR1_jCxXic"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

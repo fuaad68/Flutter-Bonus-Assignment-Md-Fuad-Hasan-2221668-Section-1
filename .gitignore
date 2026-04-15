@@ -142,6 +142,9 @@ firebase_options_production.dart
 firebase.json
 *google-services.json
 *GoogleService-Info.plist
+!/lib/firebase_options.dart
+!/android/app/google-services.json
+!/ios/Runner/GoogleService-Info.plist
 
 # Coverage
 coverage/
