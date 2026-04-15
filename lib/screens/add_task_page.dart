@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ui_class/models/card_data_model.dart';
-import 'package:flutter_ui_class/providers/task_management_provider.dart';
+import 'package:flutter_ui_class/models/task_model.dart';
+import 'package:flutter_ui_class/repositories/task_repository.dart';
 import 'package:flutter_ui_class/utils/validators.dart';
 import 'package:flutter_ui_class/widgets/core_input_field.dart';
-import 'package:flutter_ui_class/widgets/password_input_filed.dart';
-import 'package:provider/provider.dart';
 
 class AddTaskPage extends StatefulWidget {
   const AddTaskPage({super.key});
@@ -15,28 +13,58 @@ class AddTaskPage extends StatefulWidget {
 
 class _AddTaskPageState extends State<AddTaskPage> {
   final _titleController = TextEditingController();
-  final _assignedToController = TextEditingController();
-  final _phoneNumberController = TextEditingController();
-  final _passwordController = TextEditingController();
   final _descriptionController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
-
-  late TaskManagementProvider taskProvider;
-
-  @override
-  void initState() {
-    taskProvider = Provider.of<TaskManagementProvider>(context, listen: false);
-    super.initState();
-  }
+  final TaskRepository _taskRepository = TaskRepository();
+  bool _isSaving = false;
 
   @override
   void dispose() {
-    _titleController.clear();
-    _assignedToController.clear();
-    _phoneNumberController.clear();
-    _passwordController.clear();
-    _descriptionController.clear();
+    _titleController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submitTask() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() {
+      _isSaving = true;
+    });
+
+    try {
+      await _taskRepository.addTask(
+        Task(
+          id: '',
+          title: _titleController.text.trim(),
+          description: _descriptionController.text.trim(),
+        ),
+      );
+
+      if (!mounted) return;
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Task added successfully!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to add task. Please try again.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSaving = false;
+        });
+      }
+    }
   }
 
   @override
@@ -62,27 +90,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
               const SizedBox(height: 20),
               CoreInputField(
-                controller: _assignedToController,
-                keyboardType: TextInputType.text,
-                maxLines: 1,
-                labelText: "Assigned To",
-                validator: CustomValidators.validateAssignedTo,
-              ),
-
-              const SizedBox(height: 20),
-              CoreInputField(
-                controller: _phoneNumberController,
-                keyboardType: TextInputType.phone,
-                maxLines: 1,
-                labelText: "Phone Number",
-                validator: CustomValidators.validatePhoneNumber,
-              ),
-
-              const SizedBox(height: 20),
-              PasswordInputFiled(controller: _passwordController),
-
-              const SizedBox(height: 40),
-              CoreInputField(
                 controller: _descriptionController,
                 keyboardType: TextInputType.multiline,
                 maxLines: 6,
@@ -97,38 +104,23 @@ class _AddTaskPageState extends State<AddTaskPage> {
       bottomNavigationBar: Container(
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
         child: ElevatedButton(
-          onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              final String taskDetails =
-                  "Assigned to: ${_assignedToController.text} \nPhone: ${_phoneNumberController.text} \nDescription: ${_descriptionController.text} \n \n The task Password is ${_passwordController.text}";
-
-              taskProvider.addTaskExternal(
-                CardDataModel(
-                  title: _titleController.text,
-                  subtitle: taskDetails,
-                ),
-              );
-
-              Navigator.of(context).pop();
-
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    "Task added successfully!,",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  backgroundColor: Colors.green,
-                ),
-              );
-            }
-          },
+          onPressed: _isSaving ? null : _submitTask,
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.purpleAccent,
             foregroundColor: Colors.white,
             padding: EdgeInsets.symmetric(vertical: 16),
             textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          child: Text("Add Task"),
+          child: _isSaving
+              ? const SizedBox(
+                  width: 22,
+                  height: 22,
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 2,
+                  ),
+                )
+              : const Text("Add Task"),
         ),
       ),
     );
