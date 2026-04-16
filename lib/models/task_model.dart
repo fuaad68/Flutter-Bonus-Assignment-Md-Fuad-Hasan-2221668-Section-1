@@ -43,6 +43,21 @@ class Task {
     'createdAt': createdAt?.toIso8601String(),
   };
 
+  /// Create a copy of this task with optional field replacements
+  Task copyWith({
+    String? id,
+    String? title,
+    String? description,
+    DateTime? createdAt,
+  }) {
+    return Task(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
   factory Task.fromDocument(DocumentSnapshot<Map<String, dynamic>> doc) {
     final data = doc.data() ?? <String, dynamic>{};
     return Task.fromMap({

@@ -46,16 +46,18 @@ class _AddTaskPageState extends State<AddTaskPage> {
       Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Task added successfully!'),
+          content: Text('✓ Task added successfully!'),
           backgroundColor: Colors.green,
+          duration: Duration(seconds: 2),
         ),
       );
     } catch (_) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Failed to add task. Please try again.'),
+          content: Text('✗ Failed to add task. Please try again.'),
           backgroundColor: Colors.red,
+          duration: Duration(seconds: 3),
         ),
       );
     } finally {
@@ -71,8 +73,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add Task"),
+        title: const Text("Add Task"),
         backgroundColor: Colors.purpleAccent,
+        elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),

@@ -25,10 +25,18 @@ class _CoreInputFieldState extends State<CoreInputField> {
       maxLines: widget.maxLines ?? 1,
       decoration: InputDecoration(
         labelText: widget.labelText,
-        border: OutlineInputBorder(),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(
+            color: Colors.deepPurple,
+            width: 2,
+          ),
+        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       ),
-
-
       validator: widget.validator,
     );
   }

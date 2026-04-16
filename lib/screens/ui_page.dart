@@ -4,6 +4,14 @@ import 'package:flutter_ui_class/repositories/task_repository.dart';
 import 'package:flutter_ui_class/screens/add_task_page.dart';
 import 'package:flutter_ui_class/widgets/task_card_widget.dart';
 
+class RefreshController {
+  bool _isRefreshing = false;
+  final bool initialRefresh;
+  RefreshController({this.initialRefresh = false});
+  bool get isRefreshing => _isRefreshing;
+  set isRefreshing(bool value) => _isRefreshing = value;
+}
+
 class UiPage extends StatefulWidget {
   const UiPage({super.key});
 
@@ -13,6 +21,7 @@ class UiPage extends StatefulWidget {
 
 class _UiPageState extends State<UiPage> {
   final TaskRepository _taskRepository = TaskRepository();
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   Future<void> _deleteTask(String taskId) async {
     try {
@@ -20,16 +29,18 @@ class _UiPageState extends State<UiPage> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Task deleted'),
+          content: Text('✓ Task deleted successfully'),
           backgroundColor: Colors.green,
+          duration: Duration(seconds: 2),
         ),
       );
-    } catch (_) {
+    } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Failed to delete task'),
+        SnackBar(
+          content: Text('✗ Failed to delete task: ${e.toString()}'),
           backgroundColor: Colors.red,
+          duration: const Duration(seconds: 3),
         ),
       );
     }

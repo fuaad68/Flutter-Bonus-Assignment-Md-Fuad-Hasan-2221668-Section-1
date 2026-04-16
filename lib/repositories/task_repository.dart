@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_ui_class/models/task_model.dart';
 
 class TaskRepository {
@@ -11,19 +12,31 @@ class TaskRepository {
       _firestore.collection('tasks');
 
   Future<void> addTask(Task task) async {
-    final docRef = _tasksCollection.doc();
-    final payload = task
-        .copyWith(
-          id: docRef.id,
-          createdAt: task.createdAt ?? DateTime.now(),
-        )
-        .toMap();
+    try {
+      final docRef = _tasksCollection.doc();
+      final payload = task
+          .copyWith(
+            id: docRef.id,
+            createdAt: task.createdAt ?? DateTime.now(),
+          )
+          .toMap();
 
-    await docRef.set(payload);
+      await docRef.set(payload);
+      debugPrint('✓ Task added: ${task.title}');
+    } catch (e) {
+      debugPrint('✗ Error adding task: $e');
+      rethrow;
+    }
   }
 
   Future<void> deleteTask(String taskId) async {
-    await _tasksCollection.doc(taskId).delete();
+    try {
+      await _tasksCollection.doc(taskId).delete();
+      debugPrint('✓ Task deleted: $taskId');
+    } catch (e) {
+      debugPrint('✗ Error deleting task: $e');
+      rethrow;
+    }
   }
 
   Stream<List<Task>> watchTasks() {

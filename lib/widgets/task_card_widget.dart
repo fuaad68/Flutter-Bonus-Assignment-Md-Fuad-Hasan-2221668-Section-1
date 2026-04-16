@@ -18,14 +18,28 @@ class TaskCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 1,
+      elevation: 2,
+      margin: const EdgeInsets.symmetric(vertical: 8),
       child: ListTile(
-        title: Text(title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-        subtitle: Text(subtitle),
-        leading: icon != null ? Icon(icon) : Icon(Icons.task),
+        title: Text(
+          title,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
+        subtitle: Text(
+          subtitle,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
+        leading: Icon(
+          icon ?? Icons.task,
+          color: Colors.deepPurple,
+        ),
         trailing: IconButton(
           onPressed: onDelete,
           icon: const Icon(Icons.delete, color: Colors.redAccent),
+          tooltip: 'Delete task',
         ),
       ),
     );

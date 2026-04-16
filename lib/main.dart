@@ -5,9 +5,14 @@ import 'package:flutter_ui_class/screens/ui_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    debugPrint('✓ Firebase initialized successfully');
+  } catch (e) {
+    debugPrint('✗ Firebase initialization failed: $e');
+  }
   runApp(const FlutterUIApp());
 }
 
@@ -17,10 +22,12 @@ class FlutterUIApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Task Manager',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
       ),
+      debugShowCheckedModeBanner: false,
       home: const UiPage(),
     );
   }
