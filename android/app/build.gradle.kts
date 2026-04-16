@@ -24,7 +24,7 @@ defaultConfig {
         // TODO: Specify your own unique Application ID
         applicationId = "com.example.flutter_ui_class"
         
-        minSdk = 23 
+        minSdk = flutter.minSdkVersion 
         
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
